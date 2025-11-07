@@ -1,22 +1,42 @@
-redis-cluster:
-  enabled: false
-redis:
-  enabled: false
-postgresql:
-  enabled: false
-postgresql-ha:
-  enabled: false
-
 persistence:
-  enabled: false
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: "standard"
 
 gitea:
+  admin:
+    username: admin_dhruv
+    password: "dhruv3008"
+    email: "admin_dhruv@dhruvpatel-30-gitea.k3p.dev"
+
   config:
     database:
-      DB_TYPE: sqlite3
-    session:
-      PROVIDER: memory
-    cache:
-      ADAPTER: memory
-    queue:
-      TYPE: level
+      DB_TYPE: mysql
+      HOST: "gitea-mysql.default.svc.cluster.local:3306"
+      NAME: gitea_dhruv
+      USER: gitea_dhruv
+      PASSWD: gitea_passwd
+      SSL_MODE: disable
+
+    server:
+      ROOT_URL: "https://dhruvpatel-30-gitea.k3p.dev/"
+      DOMAIN: "dhruvpatel-30-gitea.k3p.dev"
+      SSH_DOMAIN: "dhruvpatel-30-gitea.k3p.dev"
+      HTTP_PORT: 3000
+      SSH_PORT: 22
+
+    service:
+      DISABLE_REGISTRATION: true
+
+service:
+  http:
+    type: ClusterIP
+    port: 3000
+
+ssh:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 22
